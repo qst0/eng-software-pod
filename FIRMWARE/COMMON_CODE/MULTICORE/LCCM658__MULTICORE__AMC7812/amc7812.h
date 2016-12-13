@@ -47,6 +47,30 @@
 
 		#define NUM_GPIO_PINS							(8U)
 
+		// Software reset register
+		#define AMC7812_DAC_REG__SW_RESET				0x7C
+
+		// Software clear register
+		#define AMC7812_DAC_REG__SW_DAC_CLR				0x55
+
+		// Hardware clear register
+		#define AMC7812_DAC_REG__HW_DAC_CLR_EN_0		0x56
+		#define AMC7812_DAC_REG__HW_DAC_CLR_EN_1		0x57
+
+		// DAC configuration register, sets synchronous/asynchronous mode
+		#define AMC7812_DAC_REG__CONFIG					0x58
+
+		// DAC Gains register, output is either 2*Vref or 5*Vref
+		#define AMC7812_DAC_REG__GAINS					0x59
+
+		// DAC Vref (millivolts)
+		#define AMC7812_DAC_VREF						2500U
+
+		// DAC gain flag: 0 for low gain (2*Vref), 1 for high gain (5*Vref)
+		#define AMC7812_DAC_GAIN_FLAG					0U
+
+		// DAC configuration mode flag: 0 for asynchronous, 1 for synchronous
+		#define	AMC7812_DAC_CONFIG_MODE_FLAG			0U
 
 		// enum type for DAC 16-bit data registers
 
@@ -65,15 +89,17 @@
 			AMC7812_REG_ADR__DAC_10_DATA = 0x3D,
 			AMC7812_REG_ADR__DAC_11_DATA = 0x3E,
 		} E_AMC7812_DAC_DATA_REG_ADDRESSES;
-
+/*
 		typedef enum
 		{
 			AMC7812_DAC_REG__SW_RESET = 0x7C,
 			AMC7812_DAC_REG__SW_DAC_CLR = 0x55,
 			AMC7812_DAC_REG__HW_DAC_CLR_EN_0 = 0x56,
-			AMC7812_DAC_REG__HW_DAC_CLR_EN_1 = 0x57
+			AMC7812_DAC_REG__HW_DAC_CLR_EN_1 = 0x57,
+			AMC7812_DAC_REG__CONFIG = 0x58,
+			AMC7812_DAC_REG__GAINS = 0x59
 		} E_AMC7812_DAC_CONTROL_REG_ADDRESSES;
-
+*/
 
 		// States for the AMC7812 DAC state machine
 
@@ -146,13 +172,13 @@
 
 			Luint8 u8DACRegAddr;
 
-			// DAC Gain
+			// DAC gain flag
 
-			Luint16 u16Gain;
+			Luint8 u8Gain;
 
-			// DAC Vref
+			// DAC output scale factor
 
-			Luint16	u16Vref;
+			Lfloat32 f32ScaleFactor;
 
 		};
 

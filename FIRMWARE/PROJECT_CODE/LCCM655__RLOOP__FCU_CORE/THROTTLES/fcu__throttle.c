@@ -48,7 +48,7 @@ extern struct _strFCU sFCU;
 #define HOVER_ENGINE_MAXIMUM_SPEED			0U
 #define HOVER_ENGINE_STATIC_HOVER_SPEED		0U
 #define HOVER_ENGINE_STANDBY_SPEED			0U
-#define FCU_MODE							NULL
+#define FCU_MODE							STOPPED_LIFTED
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 //xxxxxxxxxxxxx  DUMMY VALUES - TO BE SENT BY GROUND STATION  xxxxxxxxxxxxxx
@@ -56,7 +56,7 @@ extern struct _strFCU sFCU;
 #define GS_COMMAND_UNITS					0U
 #define GS_THROTTLE_COMMAND					10000U
 #define GS_ENGINE_NUMBER					1U
-#define GS_THROTTLE_RAMP_DURATION			65534U
+#define GS_THROTTLE_RAMP_DURATION			3000U
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 // last command values
@@ -131,7 +131,7 @@ void vFCU_THROTTLE__Process(void)
 
 	// xxxxxxxxxxx DUMMY xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	sFCU.sThrottle.eGS_Command = GS_COMMAND_MODE;
-	sFCU.sThrottle.eFCU_Mode = GS_FCU_MODE;
+	sFCU.sThrottle.eFCU_Mode = FCU_MODE;
 	sFCU.sThrottle.u16throttleStartRampDuration = GS_THROTTLE_RAMP_DURATION;
 	sFCU.sThrottle.u16ThrottleCommands[GS_ENGINE_NUMBER] = GS_THROTTLE_COMMAND;
 	sFCU.sThrottle.u8EngineNumber = GS_ENGINE_NUMBER;
@@ -183,8 +183,8 @@ void vFCU_THROTTLE__Process(void)
 	{
 		// set command variables - values should be set by ground station interface
 
-		sFCU.sThrottle.u8EngineNumber = ENGINE_NUMBER;
-		sFCU.sThrottle.u16ThrottleCommands[u8EngNum] = THROTTLE_COMMAND;
+		sFCU.sThrottle.u8EngineNumber = GS_ENGINE_NUMBER;
+		sFCU.sThrottle.u16ThrottleCommands[u8EngNum] = GS_THROTTLE_COMMAND;
 
 		// change the state
 
@@ -195,7 +195,7 @@ void vFCU_THROTTLE__Process(void)
 	{
 		// set command variables - value should be set by ground station interface
 
-		sFCU.sThrottle.u16ThrottleCommands[0] =  THROTTLE_COMMAND;
+		sFCU.sThrottle.u16ThrottleCommands[0] =  GS_THROTTLE_COMMAND;
 		sFCU.sThrottle.u8EngineNumber = ALL_HES;
 
 		// change the state
