@@ -45,17 +45,17 @@ extern struct _strFCU sFCU;
 
 //xxxxxxxxxxxxxxxx  DUMMY VALUES - TO BE FINALIZED IN FCU  xxxxxxxxxxxxxxxxx
 #define HOVER_ENGINE_MINIMUM_SPEED			0U
-#define HOVER_ENGINE_MAXIMUM_SPEED			0U
-#define HOVER_ENGINE_STATIC_HOVER_SPEED		0U
-#define HOVER_ENGINE_STANDBY_SPEED			0U
+#define HOVER_ENGINE_MAXIMUM_SPEED			50000U
+#define HOVER_ENGINE_STATIC_HOVER_SPEED		20000U
+#define HOVER_ENGINE_STANDBY_SPEED			20000U
 #define FCU_MODE							STOPPED_LIFTED
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 //xxxxxxxxxxxxx  DUMMY VALUES - TO BE SENT BY GROUND STATION  xxxxxxxxxxxxxx
-#define GS_COMMAND_MODE						SET_HEX_SPEED
+#define GS_COMMAND_MODE						STATIC_HOVERING//SET_HEX_SPEED
 #define GS_COMMAND_UNITS					0U
-#define GS_THROTTLE_COMMAND					10000U
-#define GS_ENGINE_NUMBER					1U
+#define GS_THROTTLE_COMMAND					15000U
+#define GS_ENGINE_NUMBER					0U//6U
 #define GS_THROTTLE_RAMP_DURATION			3000U
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -123,20 +123,15 @@ void vFCU_THROTTLE__Process(void)
 	// variable declarations
 	Lint16 s16Return;
 	//Luint16 u16ThrottleCommands[9];
-	Luint8 u8Counter;
+	static Luint8 u8Counter = 0U;
 	Luint16 u16DoneFlag;
 
 	Luint16 u16Command;
 	Luint16 u8EngNum;
 
-	// xxxxxxxxxxx DUMMY xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-	sFCU.sThrottle.eGS_Command = GS_COMMAND_MODE;
-	sFCU.sThrottle.eFCU_Mode = FCU_MODE;
-	sFCU.sThrottle.u16throttleStartRampDuration = GS_THROTTLE_RAMP_DURATION;
-	sFCU.sThrottle.u16ThrottleCommands[GS_ENGINE_NUMBER] = GS_THROTTLE_COMMAND;
-	sFCU.sThrottle.u8EngineNumber = GS_ENGINE_NUMBER;
+	// xxxxxxxxxxx GET DUMMY VALUES  xxxxxxxxxxxxxxxxxxxxxx
+	vFCU_THROTTLE__GetGroundStationStructValues();
 	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
 
 
 	// Determine if a change of state is required:
@@ -183,8 +178,8 @@ void vFCU_THROTTLE__Process(void)
 	{
 		// set command variables - values should be set by ground station interface
 
-		sFCU.sThrottle.u8EngineNumber = GS_ENGINE_NUMBER;
-		sFCU.sThrottle.u16ThrottleCommands[u8EngNum] = GS_THROTTLE_COMMAND;
+		//sFCU.sThrottle.u8EngineNumber = GS_ENGINE_NUMBER;
+		//sFCU.sThrottle.u16ThrottleCommands[u8EngNum] = GS_THROTTLE_COMMAND;
 
 		// change the state
 
@@ -261,10 +256,13 @@ void vFCU_THROTTLE__Process(void)
 
 		case THROTTLE_STATE__RAMP_COMMAND:
 
+			u8Counter++;
+
 			// Check the timer state: the output command will increment every 100 milliseconds
 
 			if(sFCU.sThrottle.u8100MS_Timer == 1U)
 			{
+
 				// call ramp (currently set to command all HEs, can be set to a specific HE: change index of u16ThrottleCommand)
 
 				s16Return = -1;
@@ -328,8 +326,8 @@ Lint16 s16FCU_THROTTLE__Step_Command(void)
 {
 	// variable declarations
 
-	Lint16 s16Return = 0U;
-	Lint16 s16DACReturn = 0U;
+	Lint16 s16Return;
+	Lint16 s16DACReturn;
 	Luint16 u16ThrottleCommand;
 
 	// get command value
@@ -393,7 +391,8 @@ Lint16 s16FCU_THROTTLE__Step_Command(void)
 	}
 	else
 	{
-			//
+		// Nothing to do
+		s16DACReturn = 0U;
 	}
 
 	// check for errors
@@ -649,6 +648,16 @@ void vFCU_THROTTLE__100MS_ISR(void)
 }
 
 
+void vFCU_THROTTLE__GetGroundStationStructValues(void)
+{
+	// DUMMY FUNCTION FOR TEST PURPOSES
+	sFCU.sThrottle.eGS_Command = GS_COMMAND_MODE;
+	sFCU.sThrottle.eFCU_Mode = FCU_MODE;
+	sFCU.sThrottle.u16throttleStartRampDuration = GS_THROTTLE_RAMP_DURATION;
+	sFCU.sThrottle.u16ThrottleCommands[GS_ENGINE_NUMBER] = GS_THROTTLE_COMMAND;
+	sFCU.sThrottle.u8EngineNumber = GS_ENGINE_NUMBER;
+
+}
 
 
 #endif //#if C_LOCALDEF__LCCM655__ENABLE_THIS_MODULE == 1U

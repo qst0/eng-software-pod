@@ -60,7 +60,7 @@
 		// DAC configuration register, sets synchronous/asynchronous mode
 		#define AMC7812_DAC_REG__CONFIG					0x58
 
-		// DAC Gains register, output is either 2*Vref or 5*Vref
+		// DAC Gains register
 		#define AMC7812_DAC_REG__GAINS					0x59
 
 		// DAC Vref (millivolts)

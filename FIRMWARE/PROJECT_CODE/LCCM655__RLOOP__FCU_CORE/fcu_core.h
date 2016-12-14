@@ -439,10 +439,12 @@
 		Lint16 s16FCU_THROTTLE__Write_All_HE_Throttle_Commands_to_DAC(Luint16 u16ThrottleCommand);
 		Lint16 s16FCU_THROTTLE__Hold(void);
 		void vFCU_THROTTLE__100MS_ISR(void);
+		void vFCU_THROTTLE__GetGroundStationStructValues(void);
 
 		// AMC7812 DAC
 
 		void vAMC7812__Process(void);
+		void vAMC7812__Init(void);
 
 
 	#endif //#if C_LOCALDEF__LCCM655__ENABLE_THIS_MODULE == 1U
