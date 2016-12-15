@@ -146,11 +146,24 @@ Luint16 vAMC7812_DAC__Process(void)
 			if (u8ReturnVal == 1U)
 			{
 				// Power-on reset successful
+				// set the power-down register
 
-				// set the power-down register to activate the DAC pins (bits 1 - 12),
-				// also set the PREF bit (bit 13) to enable the internal voltage reference
+				// initialize bit field
 
-				u16RegisterBitValues = 0x3FFE;
+				u16RegisterBitValues = 0x0000;
+
+				// set the bits high to activate the DAC pins 0 to 7 (bits 1 - 8)
+
+				u16RegisterBitValues |= (0xFF << 1);
+
+				// also set the PREF bit (bit 13) high because we are using the internal voltage reference
+
+				u16RegisterBitValues |= (1 << 13);
+
+				// final value should be 0x21FE (for all pins: u16RegisterBitValues = 0x3FFE)
+
+				// set the power-down register
+
 				s16Return = s16AMC7812_I2C__WriteU16(C_LOCALDEF__LCCM658__BUS_ADDX, AMC7812_REG_ADR__PWR_DWN, u16RegisterBitValues);
 
 				// set the DAC gain
