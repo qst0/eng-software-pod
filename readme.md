@@ -2,7 +2,7 @@
 _Lachlan Grogan_
 
 Please make sure you review our [code standards](FIRMWARE/CODE_STANDARD/rloop_code_standard.txt)
-and [contributing document.](CONTRIBUTING.md) Also check out our [Confluence page](http://confluence.rloop.org/display/SD/CTRL+Team+Page)
+and [contributing document.](CONTRIBUTING.md) Also check out our [Confluence page](http://confluence.rloop.org/display/SD/Embedded+Team+Page)
 
 Setup Development Tools:
 -----------------------------
